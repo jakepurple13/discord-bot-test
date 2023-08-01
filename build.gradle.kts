@@ -36,8 +36,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    implementation("com.discord4j:discord4j-core:3.2.5")
-    implementation("io.projectreactor:reactor-core:3.6.0-M1")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.3")
+    val kord = "0.10.0"
+    implementation("dev.kord:kord-core:$kord")
+    implementation("dev.kord:kord-common:$kord")
 }

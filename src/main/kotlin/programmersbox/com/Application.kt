@@ -2,33 +2,23 @@ package programmersbox.com
 
 import discord4j.common.util.Snowflake
 import discord4j.core.DiscordClient
-import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.`object`.entity.channel.MessageChannel
-import discord4j.core.spec.EmbedCreateSpec
 import discord4j.core.spec.MessageCreateSpec
 import io.ktor.server.application.*
-import io.ktor.server.cio.*
-import io.ktor.server.engine.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.mono
 import programmersbox.com.plugins.configureDatabases
 import programmersbox.com.plugins.configureRouting
 import programmersbox.com.plugins.configureSerialization
-import reactor.core.publisher.Mono
-
-const val CHANNEL_ID = "821697193097691180"
 
 fun main(args: Array<String>) {
     val token = args.first()
+    val channelId = args[1]
     DiscordClient.create(token)
         .withGateway {
             fun printMessage(message: String) {
                 mono {
                     it
-                        .getChannelById(Snowflake.of(CHANNEL_ID))
+                        .getChannelById(Snowflake.of(channelId))
                         .ofType(MessageChannel::class.java)
                         .flatMap { it.createMessage(message) }
                         .subscribe()
@@ -37,7 +27,7 @@ fun main(args: Array<String>) {
 
             mono {
                 it
-                    .getChannelById(Snowflake.of(CHANNEL_ID))
+                    .getChannelById(Snowflake.of(channelId))
                     .ofType(MessageChannel::class.java)
                     .flatMap {
                         it.createMessage(

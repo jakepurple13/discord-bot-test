@@ -1,7 +1,5 @@
 package programmersbox.com.plugins
 
-import kotlin.random.Random
-
 class DatabaseRepository(
     private val service: OtakuService,
     private val network: Network
@@ -13,7 +11,7 @@ class DatabaseRepository(
 
         sources.forEach {
             val dbModel = service.read(it.name)
-            if (dbModel != null && Random.nextBoolean()) {
+            if (dbModel != null) {
                 if (checkForUpdate(dbModel.version, it.version)) {
                     service.update(it.name, it)
                     update.add(it)

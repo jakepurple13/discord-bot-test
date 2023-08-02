@@ -21,10 +21,12 @@ suspend fun main(args: Array<String>) {
         network = Network()
     )
 
+    val settingsDb = SettingsDb()
+
     DiscordBot(
         token = token,
         channelId = channelId,
-        otakuBot = OtakuBot()
+        otakuBot = OtakuBot(settingsDb)
     ) { databaseRepository.loadSources() }
 
     /*while (true) {

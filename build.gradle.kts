@@ -4,10 +4,12 @@ val logback_version: String by project
 
 val exposed_version: String by project
 val h2_version: String by project
+val realmVersion: String by project
 plugins {
     kotlin("jvm") version "1.9.0"
     id("io.ktor.plugin") version "2.3.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
+    id("io.realm.kotlin") version "1.10.0"
 }
 
 group = "programmersbox.com"
@@ -18,6 +20,12 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-receivers")
+    }
 }
 
 repositories {
@@ -37,6 +45,8 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     val kord = "0.10.0"
-    implementation("dev.kord:kord-core:$kord")
-    implementation("dev.kord:kord-common:$kord")
+    implementation(platform("dev.kord:kord-bom:$kord"))
+    implementation("dev.kord:kord-core")
+    implementation("dev.kord:kord-common")
+    implementation("io.realm.kotlin:library-base:$realmVersion")
 }

@@ -26,7 +26,10 @@ suspend fun main(args: Array<String>) {
     DiscordBot(
         token = token,
         channelId = channelId,
-        otakuBot = OtakuBot(settingsDb)
+        otakuBot = OtakuBot(
+            settingsDb = settingsDb,
+            databaseRepository = databaseRepository
+        )
     ) { databaseRepository.loadSources() }
 
     /*while (true) {

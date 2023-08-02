@@ -4,11 +4,15 @@ import dev.kord.common.Color
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createMessage
+import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.entity.channel.TextChannel
+import dev.kord.core.event.interaction.ChatInputCommandInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
+import dev.kord.gateway.Intents
 import dev.kord.gateway.PrivilegedIntent
+import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.message.create.embed
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
@@ -48,6 +52,25 @@ suspend fun DiscordBot(
         }
     }*/
 
+    kord.createGlobalChatInputCommand(
+        "showfeatures",
+        "Show all the sources of a chosen feature"
+    ) {
+        string("feature", "Feature Type") {
+            choice("anime", "anime")
+            choice("manga", "manga")
+            choice("novel", "novel")
+            required = true
+        }
+    }
+
+    kord.on<ChatInputCommandInteractionCreateEvent> {
+        val response = interaction.deferEphemeralResponse()
+        val command = interaction.command
+        val feature = command.strings["feature"]!!
+        response.respond { otakuBot.showFeatureTypes(feature) }
+    }
+
     c?.createMessage("OtakuBot is Online!")
     c?.let { otakuBot.setupOtakuChecking(it, onCheck) }
     c?.let { otakuBot.setupServerMessages(it) }
@@ -76,7 +99,7 @@ suspend fun DiscordBot(
 
     kord.login {
         presence { watching("/Reading Anime/Manga/Novels") }
-        intents += Intent.MessageContent
+        intents += Intents(Intent.MessageContent, Intent.DirectMessages, Intent.GuildMessages)
     }
 
     Thread.currentThread().join()

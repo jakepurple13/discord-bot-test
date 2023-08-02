@@ -28,6 +28,18 @@ class OtakuService(private val database: Database) {
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
 
+    suspend fun readAll() = dbQuery {
+        OtakuSources
+            .selectAll()
+            .map { it.toExtensionJsonObject() }
+    }
+
+    suspend fun selectFeatures(feature: String) = dbQuery {
+        OtakuSources
+            .select { OtakuSources.feature eq feature }
+            .map { it.toExtensionJsonObject() }
+    }
+
     suspend fun create(source: ExtensionJsonObject) = dbQuery {
         OtakuSources.insert {
             it[name] = source.name
@@ -43,18 +55,7 @@ class OtakuService(private val database: Database) {
     suspend fun read(name: String): ExtensionJsonObject? {
         return dbQuery {
             OtakuSources.select { OtakuSources.name eq name }
-                .map {
-                    ExtensionJsonObject(
-                        name = it[OtakuSources.name],
-                        pkg = it[OtakuSources.pkg],
-                        apk = it[OtakuSources.apk],
-                        lang = it[OtakuSources.lang],
-                        code = it[OtakuSources.code],
-                        version = it[OtakuSources.version],
-                        feature = it[OtakuSources.feature],
-                        sources = emptyList()
-                    )
-                }
+                .map { it.toExtensionJsonObject() }
                 .singleOrNull()
         }
     }
@@ -78,4 +79,16 @@ class OtakuService(private val database: Database) {
             OtakuSources.deleteWhere { OtakuSources.name.eq(name) }
         }
     }
+
+    private fun ResultRow.toExtensionJsonObject() = ExtensionJsonObject(
+        name = this[OtakuSources.name],
+        pkg = this[OtakuSources.pkg],
+        apk = this[OtakuSources.apk],
+        lang = this[OtakuSources.lang],
+        code = this[OtakuSources.code],
+        version = this[OtakuSources.version],
+        feature = this[OtakuSources.feature],
+        sources = emptyList()
+    )
 }
+

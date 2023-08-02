@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/jakepurple13/OtakuWorldSources/repo/"
-private const val URL = "${REPO_URL_PREFIX}index.min.json"
+private const val REPO_URL = "${REPO_URL_PREFIX}index.min.json"
 
 class Network {
     private val json = Json {
@@ -25,7 +25,7 @@ class Network {
         }
     }
 
-    suspend fun sources() = client.get("${REPO_URL_PREFIX}index.min.json")
+    suspend fun sources() = client.get(REPO_URL)
         .bodyAsText()
         .let { json.decodeFromString<List<ExtensionJsonObject>>(it) }
 }

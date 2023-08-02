@@ -4,6 +4,10 @@ class DatabaseRepository(
     private val service: OtakuService,
     private val network: Network
 ) {
+    suspend fun loadFromDb() = service.readAll()
+
+    suspend fun loadFeaturesFromDb(feature: String) = service.selectFeatures(feature)
+
     suspend fun loadSources(): Map<CheckTypes, List<ExtensionJsonObject>> = runCatching {
         val sources = network.sources()
         val new = mutableListOf<ExtensionJsonObject>()

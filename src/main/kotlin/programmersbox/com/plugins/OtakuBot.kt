@@ -17,7 +17,7 @@ private val DarkBlue = Color(0xffa9c7ff.toInt())
 
 class OtakuBot(
     private val settingsDb: SettingsDb,
-    private val databaseRepository: DatabaseRepository
+    val databaseRepository: DatabaseRepository
 ) {
     private fun newScope() = CoroutineScope(Dispatchers.IO + Job())
 

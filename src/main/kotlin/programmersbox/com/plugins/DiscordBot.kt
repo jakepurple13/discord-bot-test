@@ -30,7 +30,7 @@ suspend fun DiscordBot(
 
     val c = kord.getChannelOf<TextChannel>(Snowflake(channelId))
 
-    c?.createMessage("OtakuBot is booting up...Please wait...")
+    c?.createSilentMessage("OtakuBot is booting up...Please wait...")
 
     otakuBot.printSettings()
 
@@ -49,6 +49,37 @@ suspend fun DiscordBot(
         kord.editSelf {
             avatar = image
             username = "OtakuBot"
+        }
+    }*/
+
+    /*kord.createGlobalChatInputCommand(
+        "showsourceurl",
+        "Get the url to download a source"
+    ) {
+        string("fromfeature", "Choose the feature type to narrow down the search") {
+            choice("anime", "anime")
+            choice("manga", "manga")
+            choice("novel", "novel")
+            required = true
+        }
+    }
+
+    kord.on<ChatInputCommandInteractionCreateEvent> {
+        val response = interaction.deferEphemeralResponse()
+        val command = interaction.command
+        val feature = command.strings["fromfeature"]!!
+        val source = otakuBot.databaseRepository.loadFeaturesFromDb(feature)
+        response.respond {
+            content = "Here is the url to download the apk!"
+            actionRow {
+                stringSelect("apk") {
+                    source.forEach { option(it.name, it.name) }
+                }
+
+                linkButton("source?.apkUrl.orEmpty()") {
+                    label = "Source Url!"
+                }
+            }
         }
     }*/
 
@@ -71,7 +102,7 @@ suspend fun DiscordBot(
         response.respond { otakuBot.showFeatureTypes(feature) }
     }
 
-    c?.createMessage("OtakuBot is Online!")
+    c?.createSilentMessage("OtakuBot is Online!")
     c?.let { otakuBot.setupOtakuChecking(it, onCheck) }
     c?.let { otakuBot.setupServerMessages(it) }
 
@@ -103,4 +134,11 @@ suspend fun DiscordBot(
     }
 
     Thread.currentThread().join()
+}
+
+suspend fun TextChannel.createSilentMessage(content: String) {
+    createMessage {
+        this.content = content
+        suppressNotifications = true
+    }
 }

@@ -50,3 +50,5 @@ data class ExtensionSourceJsonObject(
     val baseUrl: String,
     val versionId: Int,
 )
+
+val ExtensionJsonObject.apkUrl get() = "${REPO_URL_PREFIX}apk/$apk"

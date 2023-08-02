@@ -1,59 +1,81 @@
 package programmersbox.com.plugins
 
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import kotlinx.serialization.Serializable
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.transactions.transaction
 
-@Serializable
-data class ExposedUser(val name: String, val age: Int)
-class UserService(private val database: Database) {
-    object Users : Table() {
-        val id = integer("id").autoIncrement()
-        val name = varchar("name", length = 50)
-        val age = integer("age")
+class OtakuService(private val database: Database) {
+    object OtakuSources : Table() {
+        val name = text("name")
+        val pkg = text("pkg")
+        val apk = text("apk")
+        val lang = text("lang")
+        val code = long("code")
+        val version = text("version")
+        val feature = text("feature")
 
-        override val primaryKey = PrimaryKey(id)
+        override val primaryKey: PrimaryKey = PrimaryKey(name)
     }
 
     init {
         transaction(database) {
-            SchemaUtils.create(Users)
+            SchemaUtils.create(OtakuSources)
         }
     }
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
 
-    suspend fun create(user: ExposedUser): Int = dbQuery {
-        Users.insert {
-            it[name] = user.name
-            it[age] = user.age
-        }[Users.id]
+    suspend fun create(source: ExtensionJsonObject) = dbQuery {
+        OtakuSources.insert {
+            it[name] = source.name
+            it[pkg] = source.pkg
+            it[apk] = source.apk
+            it[lang] = source.lang
+            it[code] = source.code
+            it[version] = source.version
+            it[feature] = source.feature
+        }[OtakuSources.name]
     }
 
-    suspend fun read(id: Int): ExposedUser? {
+    suspend fun read(name: String): ExtensionJsonObject? {
         return dbQuery {
-            Users.select { Users.id eq id }
-                .map { ExposedUser(it[Users.name], it[Users.age]) }
+            OtakuSources.select { OtakuSources.name eq name }
+                .map {
+                    ExtensionJsonObject(
+                        name = it[OtakuSources.name],
+                        pkg = it[OtakuSources.pkg],
+                        apk = it[OtakuSources.apk],
+                        lang = it[OtakuSources.lang],
+                        code = it[OtakuSources.code],
+                        version = it[OtakuSources.version],
+                        feature = it[OtakuSources.feature],
+                        sources = emptyList()
+                    )
+                }
                 .singleOrNull()
         }
     }
 
-    suspend fun update(id: Int, user: ExposedUser) {
+    suspend fun update(name: String, source: ExtensionJsonObject) {
         dbQuery {
-            Users.update({ Users.id eq id }) {
-                it[name] = user.name
-                it[age] = user.age
+            OtakuSources.update({ OtakuSources.name eq name }) {
+                it[OtakuSources.name] = source.name
+                it[pkg] = source.pkg
+                it[apk] = source.apk
+                it[lang] = source.lang
+                it[code] = source.code
+                it[version] = source.version
+                it[feature] = source.feature
             }
         }
     }
 
-    suspend fun delete(id: Int) {
+    suspend fun delete(name: String) {
         dbQuery {
-            Users.deleteWhere { Users.id.eq(id) }
+            OtakuSources.deleteWhere { OtakuSources.name.eq(name) }
         }
     }
 }

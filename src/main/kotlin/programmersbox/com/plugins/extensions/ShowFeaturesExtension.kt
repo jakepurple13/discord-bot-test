@@ -2,13 +2,9 @@
 
 package programmersbox.com.plugins.extensions
 
-import com.kotlindiscord.kord.extensions.commands.Arguments
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.ChoiceEnum
-import com.kotlindiscord.kord.extensions.commands.application.slash.converters.impl.enumChoice
 import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
-import com.kotlindiscord.kord.extensions.types.respond
-import dev.kord.rest.builder.message.create.embed
+import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
+import com.kotlindiscord.kord.extensions.types.editingPaginator
 import programmersbox.com.plugins.DatabaseRepository
 import programmersbox.com.plugins.Emerald
 import java.util.*
@@ -19,39 +15,28 @@ class ShowFeaturesExtension(
     override val name: String = "showfeatures"
 
     override suspend fun setup() {
-        publicSlashCommand(::FeatureArgs) {
+        ephemeralSlashCommand(arguments = { FeatureArgs(true) }) {
             name = "showfeatures"
             description = "Show all the sources of a chosen feature"
 
             action {
                 val feature = arguments.feature
-                respond {
-                    val list = databaseRepository.loadFeaturesFromDb(feature.name.lowercase())
+                val list = databaseRepository
+                    .loadFeaturesFromDb(feature)
+                    .groupBy { it.feature }
+                editingPaginator {
                     if (list.isNotEmpty()) {
-                        embed {
-                            title = feature.readableName
-                                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-                            color = Emerald
-                            list.forEach { field(it.name) { it.version } }
+                        list.forEach {
+                            page {
+                                title = it.key
+                                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                                color = Emerald
+                                it.value.forEach { field(it.name) { it.version } }
+                            }
                         }
                     }
-                }
+                }.send()
             }
         }
-    }
-
-    inner class FeatureArgs : Arguments() {
-        val feature by enumChoice<Feature> {
-            name = "feature"
-            description = "Feature Type"
-            typeName = "Feature"
-            choices(Feature.entries.associateBy { it.name })
-        }
-    }
-
-    enum class Feature(override val readableName: String) : ChoiceEnum {
-        Anime("Anime"),
-        Manga("Manga"),
-        Novel("Novel")
     }
 }

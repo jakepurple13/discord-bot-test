@@ -6,7 +6,7 @@ import com.kotlindiscord.kord.extensions.checks.isNotBot
 import com.kotlindiscord.kord.extensions.commands.Arguments
 import com.kotlindiscord.kord.extensions.commands.converters.impl.defaultingString
 import com.kotlindiscord.kord.extensions.extensions.Extension
-import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
+import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
 import kotlinx.coroutines.flow.first
 import programmersbox.com.plugins.SettingsDb
@@ -18,7 +18,7 @@ class ChangeDelayExtension(
     override val name: String = "setdelay"
 
     override suspend fun setup() {
-        publicSlashCommand(::ChangeDelayArgs) {
+        ephemeralSlashCommand(::ChangeDelayArgs) {
             name = "setdelay"
             description = "Change the update check delay"
             check {

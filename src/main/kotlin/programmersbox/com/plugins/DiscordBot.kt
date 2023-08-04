@@ -9,6 +9,7 @@ import dev.kord.rest.builder.message.create.embed
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import programmersbox.com.plugins.extensions.ChangeDelayExtension
+import programmersbox.com.plugins.extensions.ShowFeatureUrlExtension
 import programmersbox.com.plugins.extensions.ShowFeaturesExtension
 
 enum class CheckTypes { New, Update }
@@ -23,6 +24,7 @@ suspend fun DiscordBot(
         presence { watching("/Reading Anime/Manga/Novels") }
         extensions {
             add { ShowFeaturesExtension(otakuBot.databaseRepository) }
+            add { ShowFeatureUrlExtension(otakuBot.databaseRepository) }
             add { ChangeDelayExtension(otakuBot.settingsDb) }
             help {
                 pingInReply = true

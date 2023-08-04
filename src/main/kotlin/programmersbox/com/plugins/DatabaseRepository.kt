@@ -1,12 +1,19 @@
 package programmersbox.com.plugins
 
+import programmersbox.com.plugins.extensions.Feature
+
 class DatabaseRepository(
     private val service: OtakuService,
     private val network: Network
 ) {
     suspend fun loadFromDb() = service.readAll()
 
-    suspend fun loadFeaturesFromDb(feature: String) = service.selectFeatures(feature)
+    suspend fun loadFeaturesFromDb(feature: Feature, includeAll: Boolean = true) =
+        if (feature == Feature.All && includeAll) {
+            service.readAll()
+        } else {
+            service.selectFeatures(feature.name.lowercase())
+        }
 
     suspend fun loadSources(): Map<CheckTypes, List<ExtensionJsonObject>> = runCatching {
         val sources = network.sources()

@@ -13,10 +13,7 @@ class FeatureArgs(
         name = "feature"
         description = "Feature Type"
         typeName = "Feature"
-        choice(Feature.Anime.name, Feature.Anime)
-        choice(Feature.Manga.name, Feature.Manga)
-        choice(Feature.Novel.name, Feature.Novel)
-        if (includeAll) choice(Feature.All.name, Feature.All)
+        if (!includeAll) choices.remove(Feature.All.readableName)
     }
 }
 

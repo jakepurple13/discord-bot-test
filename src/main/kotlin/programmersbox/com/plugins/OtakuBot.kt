@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.*
 import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
-private val Emerald = Color(0xFF2ecc71.toInt())
-private val DarkBlue = Color(0xffa9c7ff.toInt())
+val Emerald = Color(0xFF2ecc71.toInt())
+val DarkBlue = Color(0xffa9c7ff.toInt())
 
 class OtakuBot(
-    private val settingsDb: SettingsDb,
+    val settingsDb: SettingsDb,
     val databaseRepository: DatabaseRepository
 ) {
     private fun newScope() = CoroutineScope(Dispatchers.IO + Job())
@@ -119,7 +119,6 @@ class OtakuBot(
                     description = "Please choose from 'anime', 'manga', or 'novel'."
                 }
             }
-
     }
 
     private suspend fun MessageCreateEvent.setDelay(messageInfo: List<String>) {

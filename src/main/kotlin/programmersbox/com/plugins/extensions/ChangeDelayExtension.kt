@@ -27,11 +27,7 @@ class ChangeDelayExtension(
 
             action {
                 runCatching {
-                    if (member?.asMember()?.isOwner() == false) {
-                        respond { content = "Must be owner to change the delay" }
-                        error("Only Owner can change the delay!")
-                    }
-
+                    require(member?.asMember()?.isOwner() == true)
                     val amount = arguments.delay
                     runCatching { amount.toLong() }
                         .onSuccess { settingsDb.updateSettings { delayInMillis = it } }
@@ -44,6 +40,7 @@ class ChangeDelayExtension(
                         content = "Changing check delay to ${settingsDb.getSettings().first().delayInMillis}ms"
                     }
                 }
+                    .onFailure { respond { content = "Must be owner to change the delay" } }
             }
         }
     }

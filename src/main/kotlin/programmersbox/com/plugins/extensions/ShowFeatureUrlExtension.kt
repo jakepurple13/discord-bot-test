@@ -20,7 +20,6 @@ class ShowFeatureUrlExtension(
             description = "Get the url to download a source"
 
             action {
-
                 val feature = arguments.feature
                 val list = databaseRepository
                     .loadFeaturesFromDb(feature, false)

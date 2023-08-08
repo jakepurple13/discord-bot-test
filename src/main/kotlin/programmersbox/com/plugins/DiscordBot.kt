@@ -30,6 +30,9 @@ suspend fun DiscordBot(
                 pingInReply = true
             }
         }
+        hooks {
+            kordShutdownHook = true
+        }
     }
 
     val c = bot.kordRef.getChannelOf<TextChannel>(Snowflake(channelId))

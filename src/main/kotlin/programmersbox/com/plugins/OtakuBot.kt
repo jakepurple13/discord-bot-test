@@ -28,7 +28,7 @@ class OtakuBot(
         textChannel: TextChannel
     ) {
         newScope().launch {
-            while (coroutineContext.isActive) {
+            while (currentCoroutineContext().isActive) {
                 val f = readln()
                 println(f)
                 textChannel.createMessage(f)

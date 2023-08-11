@@ -8,6 +8,7 @@ import dev.kord.core.entity.channel.TextChannel
 import dev.kord.rest.builder.message.create.embed
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import programmersbox.com.plugins.extensions.BlackjackExtension
 import programmersbox.com.plugins.extensions.ChangeDelayExtension
 import programmersbox.com.plugins.extensions.ShowFeatureUrlExtension
 import programmersbox.com.plugins.extensions.ShowFeaturesExtension
@@ -26,12 +27,17 @@ suspend fun DiscordBot(
             add { ShowFeaturesExtension(otakuBot.databaseRepository) }
             add { ShowFeatureUrlExtension(otakuBot.databaseRepository) }
             add { ChangeDelayExtension(otakuBot.settingsDb) }
+            add { BlackjackExtension() }
             help {
                 pingInReply = true
             }
         }
         hooks {
             kordShutdownHook = true
+        }
+        errorResponse { message, type ->
+            type.error.printStackTrace()
+            println(message)
         }
     }
 

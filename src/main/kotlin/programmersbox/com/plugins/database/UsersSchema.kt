@@ -1,12 +1,12 @@
-package programmersbox.com.plugins
+package programmersbox.com.plugins.database
 
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
+import programmersbox.com.plugins.ExtensionJsonObject
 
-class OtakuService(private val database: Database) {
+class OtakuService {
     object OtakuSources : Table() {
         val name = text("name")
         val pkg = text("pkg")
@@ -17,12 +17,6 @@ class OtakuService(private val database: Database) {
         val feature = text("feature")
 
         override val primaryKey: PrimaryKey = PrimaryKey(name)
-    }
-
-    init {
-        transaction(database) {
-            SchemaUtils.create(OtakuSources)
-        }
     }
 
     suspend fun <T> dbQuery(block: suspend () -> T): T =
@@ -91,4 +85,3 @@ class OtakuService(private val database: Database) {
         sources = emptyList()
     )
 }
-

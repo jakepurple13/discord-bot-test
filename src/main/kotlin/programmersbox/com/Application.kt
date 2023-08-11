@@ -3,6 +3,10 @@ package programmersbox.com
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import programmersbox.com.plugins.*
+import programmersbox.com.plugins.database.DatabaseRepository
+import programmersbox.com.plugins.database.DatabaseSetup
+import programmersbox.com.plugins.database.OtakuService
+import programmersbox.com.plugins.database.configureDatabases
 
 suspend fun main(args: Array<String>) {
     val token = args.first()
@@ -14,7 +18,10 @@ suspend fun main(args: Array<String>) {
         driver = "org.h2.Driver",
         password = ""
     )
-    val otakuService = OtakuService(database)
+
+    DatabaseSetup(database)
+
+    val otakuService = OtakuService()
 
     val databaseRepository = DatabaseRepository(
         service = otakuService,

@@ -5,9 +5,9 @@ package programmersbox.com.plugins.extensions
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.ephemeralSlashCommand
 import com.kotlindiscord.kord.extensions.types.editingPaginator
-import programmersbox.com.plugins.DatabaseRepository
 import programmersbox.com.plugins.Emerald
 import programmersbox.com.plugins.apkUrl
+import programmersbox.com.plugins.database.DatabaseRepository
 
 class ShowFeatureUrlExtension(
     private val databaseRepository: DatabaseRepository

@@ -8,6 +8,7 @@ import dev.kord.core.entity.channel.TextChannel
 import dev.kord.rest.builder.message.create.embed
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
+import programmersbox.com.plugins.database.GamesDatabase
 import programmersbox.com.plugins.extensions.ChangeDelayExtension
 import programmersbox.com.plugins.extensions.ShowFeatureUrlExtension
 import programmersbox.com.plugins.extensions.ShowFeaturesExtension
@@ -20,7 +21,7 @@ suspend fun DiscordBot(
     otakuBot: OtakuBot,
     onCheck: suspend () -> Map<CheckTypes, List<ExtensionJsonObject>>
 ) {
-    val games = Games()
+    val games = Games(GamesDatabase())
     val bot = ExtensibleBot(token) {
         presence { watching("/Reading Anime/Manga/Novels") }
         extensions {

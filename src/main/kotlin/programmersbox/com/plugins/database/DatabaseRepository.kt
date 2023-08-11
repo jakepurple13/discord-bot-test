@@ -1,5 +1,8 @@
-package programmersbox.com.plugins
+package programmersbox.com.plugins.database
 
+import programmersbox.com.plugins.CheckTypes
+import programmersbox.com.plugins.ExtensionJsonObject
+import programmersbox.com.plugins.Network
 import programmersbox.com.plugins.extensions.Feature
 
 class DatabaseRepository(

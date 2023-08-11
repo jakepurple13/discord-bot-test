@@ -6,6 +6,7 @@ import dev.kord.core.entity.channel.TextChannel
 import dev.kord.rest.builder.message.create.embed
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import programmersbox.com.plugins.database.DatabaseRepository
 
 val Emerald = Color(0xFF2ecc71.toInt())
 val DarkBlue = Color(0xffa9c7ff.toInt())

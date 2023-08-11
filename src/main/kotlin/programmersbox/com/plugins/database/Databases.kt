@@ -1,4 +1,4 @@
-package programmersbox.com.plugins
+package programmersbox.com.plugins.database
 
 import io.ktor.server.application.*
 

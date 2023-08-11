@@ -19,7 +19,6 @@ suspend fun DiscordBot(
     token: String,
     channelId: String,
     otakuBot: OtakuBot,
-    onCheck: suspend () -> Map<CheckTypes, List<ExtensionJsonObject>>
 ) {
     val games = Games(GamesDatabase())
     val bot = ExtensibleBot(token) {
@@ -61,7 +60,7 @@ suspend fun DiscordBot(
     }*/
 
     c?.createSilentMessage("OtakuBot is Online!")
-    c?.let { otakuBot.setupOtakuChecking(it, onCheck) }
+    c?.let { otakuBot.setupOtakuChecking(it) }
     c?.let { otakuBot.setupServerMessages(it) }
 
     Runtime.getRuntime().addShutdownHook(

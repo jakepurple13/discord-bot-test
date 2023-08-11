@@ -41,7 +41,6 @@ class OtakuBot(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun setupOtakuChecking(
         textChannel: TextChannel,
-        onCheck: suspend () -> Map<CheckTypes, List<ExtensionJsonObject>>
     ) {
         settings
             .map { it.delayInMillis }
@@ -53,7 +52,7 @@ class OtakuBot(
                             content = "Starting Check..."
                             suppressNotifications = true
                         }
-                        emit(onCheck())
+                        emit(databaseRepository.loadSources())
                         delay(it)
                     }
                 }

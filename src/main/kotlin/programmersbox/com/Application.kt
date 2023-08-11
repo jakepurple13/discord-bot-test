@@ -13,7 +13,7 @@ suspend fun main(args: Array<String>) {
     val channelId = args[1]
 
     val database = Database.connect(
-        url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+        url = "jdbc:h2:./gamesdatabase;DB_CLOSE_DELAY=-1",
         user = "root",
         driver = "org.h2.Driver",
         password = ""
@@ -37,7 +37,7 @@ suspend fun main(args: Array<String>) {
             settingsDb = settingsDb,
             databaseRepository = databaseRepository
         )
-    ) { databaseRepository.loadSources() }
+    )
 
     /*while (true) {
         val f = readln()
